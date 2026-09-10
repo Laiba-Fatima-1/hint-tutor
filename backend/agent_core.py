@@ -14,7 +14,7 @@ import os
 import time
 import requests
 
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-3.6-flash"
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 
 CATEGORY_TO_POLICY = {
