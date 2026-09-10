@@ -1,0 +1,28 @@
+# --- Python (backend) ---
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# environment secrets
+.env
+.env.*
+!.env.example
+
+# --- Node / Vite (frontend) ---
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Original prototype's generated output (if you keep the old folder too) ---
+reports/

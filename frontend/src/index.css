@@ -1,0 +1,57 @@
+:root {
+  --slate: #1f3d2e;
+  --slate-panel: #24452f;
+  --slate-panel-raised: #2b4f37;
+  --chalk: #f2f0e8;
+  --chalk-dim: rgba(242, 240, 232, 0.62);
+  --chalk-faint: rgba(242, 240, 232, 0.15);
+  --chalk-faint-strong: rgba(242, 240, 232, 0.32);
+
+  --hint: #e8c547;
+  --socratic: #6fa8dc;
+  --concept: #c792ea;
+  --partial: #8fcb8f;
+  --refuse: #e8804d;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--slate);
+  background-image:
+    radial-gradient(rgba(242, 240, 232, 0.035) 1px, transparent 1px);
+  background-size: 3px 3px;
+  color: var(--chalk);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+button {
+  font-family: inherit;
+}
+
+textarea, input {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--hint);
+  color: #1a1a12;
+}
