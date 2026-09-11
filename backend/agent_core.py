@@ -23,6 +23,8 @@ CATEGORY_TO_POLICY = {
     "code_explanation": "concept_explanation",
     "partial_code_feedback": "partial_code_feedback",
     "full_solution_request": "refuse_and_redirect",
+    "general_question": "concept_explanation",
+
 }
 
 # Display labels + colors used by the frontend to render the policy tag.
@@ -42,8 +44,10 @@ POLICY_INSTRUCTIONS = {
         "the corrected code or the fixed line."
     ),
     "socratic_question": (
-        "Ask 1-2 guiding questions that lead the student to discover the "
-        "concept themselves. Do NOT state the answer or explanation directly."
+        "Help the student reason through the concept themselves. Ask 1-2 "
+        "guiding questions when appropriate, but also provide enough "
+        "context to keep the conversation useful. Do not simply give a "
+        "complete solution to an assignment."
     ),
     "concept_explanation": (
         "Explain the underlying concept clearly, using a small GENERIC "
@@ -63,12 +67,16 @@ POLICY_INSTRUCTIONS = {
     ),
 }
 
-SYSTEM_PROMPT = """You are a pedagogical programming tutor agent. You must
+SYSTEM_PROMPT =  """You are a pedagogical programming tutor agent. You must
 strictly follow the response policy you are given for this turn. You are
 NEVER allowed to produce a complete, directly-submittable solution unless
-explicitly told the policy permits it. Keep responses concise (3-6
-sentences) and encouraging in tone."""
+explicitly told the policy permits it.
 
+Give a complete and useful response for the student's question. Do not
+stop mid-sentence or leave the explanation unfinished. Be clear,
+encouraging, and appropriately detailed. For simple questions, keep the
+answer concise; for questions that require explanation, provide enough
+detail for the student to understand the concept."""
 
 class AgentError(Exception):
     """Raised for agent/config errors that should map to a clean HTTP error."""
@@ -85,7 +93,7 @@ def call_gemini(system: str, user_message: str, retries: int = 3) -> str:
     payload = {
         "system_instruction": {"parts": [{"text": system}]},
         "contents": [{"role": "user", "parts": [{"text": user_message}]}],
-        "generationConfig": {"maxOutputTokens": 400},
+        "generationConfig": {"maxOutputTokens": 1000},
     }
     last_error = None
     for attempt in range(retries):
@@ -117,8 +125,18 @@ def call_gemini(system: str, user_message: str, retries: int = 3) -> str:
 def classify_request(student_message: str, student_code: str | None) -> str:
     """Step 1: classify the student's request into one of 5 categories."""
     prompt = f"""Classify this student request into EXACTLY ONE of these
-categories: debugging, conceptual_confusion, code_explanation,
-partial_code_feedback, full_solution_request.
+categories:
+
+- debugging
+- conceptual_confusion
+- code_explanation
+- partial_code_feedback
+- full_solution_request
+- general_question
+
+Use general_question for greetings, introductions, requests to
+start learning a programming language, or questions that don't
+clearly fit the other categories.
 
 Student message: "{student_message}"
 Student code (may be null): {student_code}
